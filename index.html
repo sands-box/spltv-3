@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab Determinan SPLTV – Eksplorasi Interaktif (Rapi & Jelas)</title>
+    <title>Lab Determinan SPLTV – Eksplorasi Interaktif</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -20,14 +20,12 @@
             --info: #818cf8;
             --info-light: #e0e7ff;
         }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
-
         body {
             background: var(--bg);
             display: flex;
@@ -37,7 +35,6 @@
             padding: 24px;
             min-width: 1340px;
         }
-
         .main-container {
             width: 1300px;
             background: var(--surface);
@@ -49,7 +46,6 @@
             gap: 24px;
             flex-shrink: 0;
         }
-
         h1 {
             text-align: center;
             color: var(--text);
@@ -57,14 +53,12 @@
             font-weight: 700;
             flex-shrink: 0;
         }
-
         .subtitle {
             text-align: center;
             color: var(--text-secondary);
             font-size: 15px;
             flex-shrink: 0;
         }
-
         .workspace {
             display: flex;
             gap: 24px;
@@ -72,8 +66,6 @@
             flex-shrink: 0;
             align-items: flex-start;
         }
-
-        /* Panel Kiri: Sistem Persamaan */
         .system-panel {
             width: 430px;
             flex-shrink: 0;
@@ -85,20 +77,17 @@
             flex-direction: column;
             gap: 16px;
         }
-
         .system-panel h3 {
             color: var(--text);
             font-size: 18px;
             font-weight: 600;
             margin: 0;
         }
-
         #equationsInput {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
         .equation-row {
             display: flex;
             align-items: center;
@@ -110,7 +99,6 @@
             border: 1px solid var(--border);
             height: 50px;
         }
-
         .equation-row input {
             width: 58px;
             padding: 6px 2px;
@@ -128,7 +116,6 @@
             background: #eef2ff;
             outline: none;
         }
-
         .equation-row .var {
             font-weight: 700;
             font-size: 16px;
@@ -137,22 +124,18 @@
             min-width: 14px;
             text-align: center;
         }
-
         .equation-row .equals {
             font-weight: 800;
             font-size: 18px;
             margin: 0 4px;
             flex-shrink: 0;
         }
-
         .system-panel p {
             font-size: 13px;
             color: var(--text-secondary);
             margin: 0;
             line-height: 1.4;
         }
-
-        /* Panel Kanan: Matriks & Determinan */
         .matrix-panel {
             flex: 1;
             flex-shrink: 0;
@@ -164,13 +147,11 @@
             flex-direction: column;
             gap: 18px;
         }
-
         .matrix-tabs {
             display: flex;
             gap: 8px;
             flex-wrap: nowrap;
         }
-
         .matrix-tab {
             padding: 8px 18px;
             border-radius: 24px;
@@ -191,7 +172,6 @@
             color: white;
             border-color: var(--primary);
         }
-
         .matrix-interactive-area {
             display: flex;
             align-items: flex-start;
@@ -203,14 +183,12 @@
             padding: 18px 24px;
             border: 1px solid var(--border);
         }
-
         .matrix-grid-container {
             display: flex;
             align-items: center;
             gap: 6px;
             flex-shrink: 0;
         }
-
         .bracket {
             font-size: 50px;
             font-weight: 300;
@@ -218,7 +196,6 @@
             line-height: 1;
             flex-shrink: 0;
         }
-
         .matrix-grid {
             display: grid;
             grid-template-columns: repeat(3, 68px);
@@ -226,7 +203,6 @@
             gap: 6px;
             flex-shrink: 0;
         }
-
         .matrix-cell {
             background: white;
             border: 2px solid #cbd5e1;
@@ -239,22 +215,18 @@
             flex-shrink: 0;
             transition: 0.2s;
         }
-
         .matrix-cell.const-highlight {
             background: var(--warning-light) !important;
             border-color: var(--warning) !important;
         }
-
         .matrix-cell.coeff-highlight {
             background: var(--info-light) !important;
             border-color: var(--info) !important;
         }
-
         .matrix-cell.drop-allowed {
             border-color: var(--success) !important;
             background: var(--success-light) !important;
         }
-
         .matrix-cell input {
             width: 100%;
             height: 100%;
@@ -266,14 +238,12 @@
             outline: none;
             border-radius: 10px;
         }
-
         .constant-column {
             display: flex;
             flex-direction: column;
             gap: 6px;
             flex-shrink: 0;
         }
-
         .constant-cell {
             width: 68px;
             height: 56px;
@@ -293,14 +263,12 @@
             cursor: grabbing;
             opacity: 0.6;
         }
-
         .matrix-panel p {
             font-size: 13px;
             color: var(--text-secondary);
             margin: 0;
             line-height: 1.4;
         }
-
         .sarrus-container {
             background: white;
             border-radius: 16px;
@@ -310,7 +278,6 @@
             color: var(--text-secondary);
             line-height: 1.6;
         }
-
         .sarrus-highlight {
             background: var(--warning-light);
             padding: 2px 6px;
@@ -319,7 +286,6 @@
             display: inline-block;
             color: var(--text);
         }
-
         .result-box {
             padding: 16px 20px;
             border-radius: 16px;
@@ -332,7 +298,6 @@
             justify-content: center;
             transition: background 0.3s;
         }
-
         button {
             background: var(--primary);
             color: white;
@@ -354,17 +319,13 @@
 <body>
     <div class="main-container">
         <h1>🧪 Lab Determinan SPLTV</h1>
-        <p class="subtitle">Edit langsung · Seret konstanta · Lihat Sarrus real‑time</p>
-
+        <p class="subtitle">Edit langsung &middot; Seret konstanta &middot; Lihat Sarrus real‑time</p>
         <div class="workspace">
-            <!-- Panel Kiri: Persamaan -->
             <div class="system-panel">
                 <h3>📝 Sistem Persamaan</h3>
                 <div id="equationsInput"></div>
                 <p>✏️ Ubah koefisien atau konstanta, matriks langsung berubah.</p>
             </div>
-
-            <!-- Panel Kanan: Matriks & Determinan -->
             <div class="matrix-panel">
                 <div class="matrix-tabs">
                     <button class="matrix-tab active" data-tab="D">Matriks D</button>
@@ -372,7 +333,6 @@
                     <button class="matrix-tab" data-tab="Dy">Matriks Dy</button>
                     <button class="matrix-tab" data-tab="Dz">Matriks Dz</button>
                 </div>
-
                 <div class="matrix-interactive-area">
                     <div class="matrix-grid-container">
                         <span class="bracket">[</span>
@@ -382,13 +342,11 @@
                     <div class="constant-column" id="constantColumn"></div>
                 </div>
                 <p>💡 Seret konstanta (kuning) ke sel kuning pada matriks Dx / Dy / Dz.</p>
-
                 <div class="sarrus-container" id="sarrusDisplay"></div>
                 <div class="result-box" id="resultBox"></div>
             </div>
         </div>
     </div>
-
     <script>
         (function() {
             let coefficients = [
@@ -468,7 +426,6 @@
                 grid.innerHTML = '';
                 const matrix = getMatrixForTab(activeTab);
                 const highlightCol = getHighlightCol(activeTab);
-
                 for (let i = 0; i < 3; i++) {
                     for (let j = 0; j < 3; j++) {
                         const cell = document.createElement('div');
@@ -478,7 +435,6 @@
                         } else {
                             cell.classList.add('coeff-highlight');
                         }
-
                         cell.addEventListener('dragover', (e) => {
                             e.preventDefault();
                             if (j === highlightCol && activeTab !== 'D') {
@@ -497,7 +453,6 @@
                             }
                             draggedConstant = null;
                         });
-
                         const input = document.createElement('input');
                         input.type = 'number';
                         input.value = matrix[i][j];
@@ -574,7 +529,6 @@
                 const Dx = det3x3(getMatrixForTab('Dx'));
                 const Dy = det3x3(getMatrixForTab('Dy'));
                 const Dz = det3x3(getMatrixForTab('Dz'));
-
                 document.getElementById('sarrusDisplay').innerHTML = `
                     <h4 style="margin-bottom:8px;font-size:15px;">📐 Aturan Sarrus (Real‑Time)</h4>
                     ${formatSarrus(coefficients, 'D')}
@@ -583,7 +537,6 @@
                     ${formatSarrus(getMatrixForTab('Dy'), 'Dy')}
                     ${formatSarrus(getMatrixForTab('Dz'), 'Dz')}
                 `;
-
                 const resultDiv = document.getElementById('resultBox');
                 if (Math.abs(D) < 1e-10) {
                     resultDiv.innerHTML = '⚠️ Determinan D = 0, sistem tidak memiliki solusi tunggal.';
