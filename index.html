@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Determinan SPLTV – Eksplorasi Interaktif (Rapi & Jelas)</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f1f5f9;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --info: #818cf8;
+            --info-light: #e0e7ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 24px;
+            min-width: 1340px;
+        }
+
+        .main-container {
+            width: 1300px;
+            background: var(--surface);
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            padding: 28px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text);
+            font-size: 30px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .workspace {
+            display: flex;
+            gap: 24px;
+            flex-wrap: nowrap;
+            flex-shrink: 0;
+            align-items: flex-start;
+        }
+
+        /* Panel Kiri: Sistem Persamaan */
+        .system-panel {
+            width: 430px;
+            flex-shrink: 0;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px 22px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .system-panel h3 {
+            color: var(--text);
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        #equationsInput {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .equation-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: nowrap;
+            background: white;
+            padding: 10px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            height: 50px;
+        }
+
+        .equation-row input {
+            width: 58px;
+            padding: 6px 2px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 15px;
+            flex-shrink: 0;
+            height: 34px;
+            transition: 0.15s;
+        }
+        .equation-row input:focus {
+            border-color: var(--primary);
+            background: #eef2ff;
+            outline: none;
+        }
+
+        .equation-row .var {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary);
+            flex-shrink: 0;
+            min-width: 14px;
+            text-align: center;
+        }
+
+        .equation-row .equals {
+            font-weight: 800;
+            font-size: 18px;
+            margin: 0 4px;
+            flex-shrink: 0;
+        }
+
+        .system-panel p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Panel Kanan: Matriks & Determinan */
+        .matrix-panel {
+            flex: 1;
+            flex-shrink: 0;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px 22px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .matrix-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: nowrap;
+        }
+
+        .matrix-tab {
+            padding: 8px 18px;
+            border-radius: 24px;
+            border: 2px solid var(--border);
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            transition: 0.2s;
+        }
+        .matrix-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .matrix-interactive-area {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 30px;
+            flex-wrap: nowrap;
+            background: white;
+            border-radius: 16px;
+            padding: 18px 24px;
+            border: 1px solid var(--border);
+        }
+
+        .matrix-grid-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .bracket {
+            font-size: 50px;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 68px);
+            grid-template-rows: repeat(3, 56px);
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .matrix-cell {
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 68px;
+            height: 56px;
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+
+        .matrix-cell.const-highlight {
+            background: var(--warning-light) !important;
+            border-color: var(--warning) !important;
+        }
+
+        .matrix-cell.coeff-highlight {
+            background: var(--info-light) !important;
+            border-color: var(--info) !important;
+        }
+
+        .matrix-cell.drop-allowed {
+            border-color: var(--success) !important;
+            background: var(--success-light) !important;
+        }
+
+        .matrix-cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-weight: 700;
+            font-size: 16px;
+            background: transparent;
+            outline: none;
+            border-radius: 10px;
+        }
+
+        .constant-column {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .constant-cell {
+            width: 68px;
+            height: 56px;
+            background: var(--warning-light);
+            border: 2px dashed var(--warning);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            cursor: grab;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: 0.15s;
+        }
+        .constant-cell:active {
+            cursor: grabbing;
+            opacity: 0.6;
+        }
+
+        .matrix-panel p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .sarrus-container {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .sarrus-highlight {
+            background: var(--warning-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            display: inline-block;
+            color: var(--text);
+        }
+
+        .result-box {
+            padding: 16px 20px;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 18px;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            flex-shrink: 0;
+            height: 38px;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>🧪 Lab Determinan SPLTV</h1>
+        <p class="subtitle">Edit langsung · Seret konstanta · Lihat Sarrus real‑time</p>
+
+        <div class="workspace">
+            <!-- Panel Kiri: Persamaan -->
+            <div class="system-panel">
+                <h3>📝 Sistem Persamaan</h3>
+                <div id="equationsInput"></div>
+                <p>✏️ Ubah koefisien atau konstanta, matriks langsung berubah.</p>
+            </div>
+
+            <!-- Panel Kanan: Matriks & Determinan -->
+            <div class="matrix-panel">
+                <div class="matrix-tabs">
+                    <button class="matrix-tab active" data-tab="D">Matriks D</button>
+                    <button class="matrix-tab" data-tab="Dx">Matriks Dx</button>
+                    <button class="matrix-tab" data-tab="Dy">Matriks Dy</button>
+                    <button class="matrix-tab" data-tab="Dz">Matriks Dz</button>
+                </div>
+
+                <div class="matrix-interactive-area">
+                    <div class="matrix-grid-container">
+                        <span class="bracket">[</span>
+                        <div class="matrix-grid" id="matrixGrid"></div>
+                        <span class="bracket">]</span>
+                    </div>
+                    <div class="constant-column" id="constantColumn"></div>
+                </div>
+                <p>💡 Seret konstanta (kuning) ke sel kuning pada matriks Dx / Dy / Dz.</p>
+
+                <div class="sarrus-container" id="sarrusDisplay"></div>
+                <div class="result-box" id="resultBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            let coefficients = [
+                [1, 1, 1],
+                [2, -1, 1],
+                [1, 2, -1]
+            ];
+            let constants = [6, 3, 3];
+            let activeTab = 'D';
+            let draggedConstant = null;
+
+            function renderEquationsInput() {
+                const container = document.getElementById('equationsInput');
+                container.innerHTML = '';
+                const vars = ['x', 'y', 'z'];
+                coefficients.forEach((row, i) => {
+                    const eqRow = document.createElement('div');
+                    eqRow.className = 'equation-row';
+                    row.forEach((coeff, j) => {
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.value = coeff;
+                        input.step = 'any';
+                        input.addEventListener('input', (e) => {
+                            coefficients[i][j] = parseFloat(e.target.value) || 0;
+                            refreshAll();
+                        });
+                        eqRow.appendChild(input);
+                        const varSpan = document.createElement('span');
+                        varSpan.className = 'var';
+                        varSpan.textContent = vars[j];
+                        eqRow.appendChild(varSpan);
+                        if (j < 2) {
+                            const plus = document.createElement('span');
+                            plus.textContent = '+';
+                            plus.style.margin = '0 2px';
+                            plus.style.color = '#64748b';
+                            eqRow.appendChild(plus);
+                        }
+                    });
+                    const eqSign = document.createElement('span');
+                    eqSign.className = 'equals';
+                    eqSign.textContent = '=';
+                    eqRow.appendChild(eqSign);
+                    const constInput = document.createElement('input');
+                    constInput.type = 'number';
+                    constInput.value = constants[i];
+                    constInput.step = 'any';
+                    constInput.addEventListener('input', (e) => {
+                        constants[i] = parseFloat(e.target.value) || 0;
+                        refreshAll();
+                    });
+                    eqRow.appendChild(constInput);
+                    container.appendChild(eqRow);
+                });
+            }
+
+            function getMatrixForTab(tab) {
+                const copy = coefficients.map(r => [...r]);
+                if (tab === 'D') return copy;
+                if (tab === 'Dx') return copy.map((r, i) => { r[0] = constants[i]; return r; });
+                if (tab === 'Dy') return copy.map((r, i) => { r[1] = constants[i]; return r; });
+                if (tab === 'Dz') return copy.map((r, i) => { r[2] = constants[i]; return r; });
+                return copy;
+            }
+
+            function getHighlightCol(tab) {
+                if (tab === 'D') return -1;
+                if (tab === 'Dx') return 0;
+                if (tab === 'Dy') return 1;
+                if (tab === 'Dz') return 2;
+                return -1;
+            }
+
+            function renderMatrix() {
+                const grid = document.getElementById('matrixGrid');
+                grid.innerHTML = '';
+                const matrix = getMatrixForTab(activeTab);
+                const highlightCol = getHighlightCol(activeTab);
+
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'matrix-cell';
+                        if (j === highlightCol) {
+                            cell.classList.add('const-highlight');
+                        } else {
+                            cell.classList.add('coeff-highlight');
+                        }
+
+                        cell.addEventListener('dragover', (e) => {
+                            e.preventDefault();
+                            if (j === highlightCol && activeTab !== 'D') {
+                                cell.classList.add('drop-allowed');
+                            }
+                        });
+                        cell.addEventListener('dragleave', () => {
+                            cell.classList.remove('drop-allowed');
+                        });
+                        cell.addEventListener('drop', (e) => {
+                            e.preventDefault();
+                            cell.classList.remove('drop-allowed');
+                            if (draggedConstant !== null && j === highlightCol && activeTab !== 'D') {
+                                constants[i] = draggedConstant;
+                                refreshAll();
+                            }
+                            draggedConstant = null;
+                        });
+
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.value = matrix[i][j];
+                        input.step = 'any';
+                        input.addEventListener('input', (e) => {
+                            const newValue = parseFloat(e.target.value) || 0;
+                            if (activeTab === 'D') {
+                                coefficients[i][j] = newValue;
+                            } else if (activeTab === 'Dx' && j === 0) {
+                                constants[i] = newValue;
+                            } else if (activeTab === 'Dy' && j === 1) {
+                                constants[i] = newValue;
+                            } else if (activeTab === 'Dz' && j === 2) {
+                                constants[i] = newValue;
+                            } else {
+                                coefficients[i][j] = newValue;
+                            }
+                            refreshAll();
+                        });
+                        cell.appendChild(input);
+                        grid.appendChild(cell);
+                    }
+                }
+            }
+
+            function renderConstantColumn() {
+                const col = document.getElementById('constantColumn');
+                col.innerHTML = '<strong style="display:block;text-align:center;font-size:13px;margin-bottom:6px;">Konstanta</strong>';
+                constants.forEach((val, i) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'constant-cell';
+                    cell.textContent = val;
+                    cell.draggable = true;
+                    cell.addEventListener('dragstart', (e) => {
+                        draggedConstant = val;
+                        cell.style.opacity = '0.5';
+                    });
+                    cell.addEventListener('dragend', () => {
+                        cell.style.opacity = '1';
+                    });
+                    col.appendChild(cell);
+                });
+            }
+
+            function det3x3(m) {
+                return m[0][0] * m[1][1] * m[2][2] +
+                    m[0][1] * m[1][2] * m[2][0] +
+                    m[0][2] * m[1][0] * m[2][1] -
+                    m[0][2] * m[1][1] * m[2][0] -
+                    m[0][0] * m[1][2] * m[2][1] -
+                    m[0][1] * m[1][0] * m[2][2];
+            }
+
+            function formatSarrus(m, name) {
+                const [[a, b, c], [d, e, f], [g, h, i]] = m;
+                const pos = a * e * i + b * f * g + c * d * h;
+                const neg = c * e * g + a * f * h + b * d * i;
+                return `
+                    <div style="margin:6px 0;">
+                        <strong>${name}</strong> = 
+                        (<span class="sarrus-highlight">${a}·${e}·${i}</span> + 
+                         <span class="sarrus-highlight">${b}·${f}·${g}</span> + 
+                         <span class="sarrus-highlight">${c}·${d}·${h}</span>) − 
+                        (<span class="sarrus-highlight">${c}·${e}·${g}</span> + 
+                         <span class="sarrus-highlight">${a}·${f}·${h}</span> + 
+                         <span class="sarrus-highlight">${b}·${d}·${i}</span>)<br>
+                        = <strong>${pos}</strong> − <strong>${neg}</strong> = <span style="font-size:16px;font-weight:700;">${pos - neg}</span>
+                    </div>
+                `;
+            }
+
+            function calculateAll() {
+                const D = det3x3(coefficients);
+                const Dx = det3x3(getMatrixForTab('Dx'));
+                const Dy = det3x3(getMatrixForTab('Dy'));
+                const Dz = det3x3(getMatrixForTab('Dz'));
+
+                document.getElementById('sarrusDisplay').innerHTML = `
+                    <h4 style="margin-bottom:8px;font-size:15px;">📐 Aturan Sarrus (Real‑Time)</h4>
+                    ${formatSarrus(coefficients, 'D')}
+                    <hr style="margin:12px 0;border:0.5px solid #e2e8f0;">
+                    ${formatSarrus(getMatrixForTab('Dx'), 'Dx')}
+                    ${formatSarrus(getMatrixForTab('Dy'), 'Dy')}
+                    ${formatSarrus(getMatrixForTab('Dz'), 'Dz')}
+                `;
+
+                const resultDiv = document.getElementById('resultBox');
+                if (Math.abs(D) < 1e-10) {
+                    resultDiv.innerHTML = '⚠️ Determinan D = 0, sistem tidak memiliki solusi tunggal.';
+                    resultDiv.style.background = '#fee2e2';
+                } else {
+                    const x = Dx / D;
+                    const y = Dy / D;
+                    const z = Dz / D;
+                    resultDiv.innerHTML = `✅ Solusi: <strong>x = ${x.toFixed(4)}</strong>, <strong>y = ${y.toFixed(4)}</strong>, <strong>z = ${z.toFixed(4)}</strong>`;
+                    resultDiv.style.background = '#d9f99d';
+                }
+            }
+
+            function refreshAll() {
+                renderEquationsInput();
+                renderMatrix();
+                renderConstantColumn();
+                calculateAll();
+            }
+
+            document.querySelectorAll('.matrix-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.matrix-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    activeTab = tab.dataset.tab;
+                    renderMatrix();
+                    calculateAll();
+                });
+            });
+
+            renderEquationsInput();
+            renderMatrix();
+            renderConstantColumn();
+            calculateAll();
+        })();
+    </script>
+</body>
+</html>
