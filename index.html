@@ -3,229 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab Determinan SPLTV – Eksplorasi Interaktif</title>
+    <title>Lab Determinan SPLTV – Eksplorasi Interaktif Cramer</title>
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --bg: #f1f5f9;
+            --bg: #f0f4f8;
             --surface: #ffffff;
+            --surface-alt: #f8fafc;
             --border: #e2e8f0;
             --text: #0f172a;
             --text-secondary: #475569;
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --primary-hover: #4338ca;
             --warning: #f59e0b;
-            --warning-light: #fef3c7;
+            --warning-light: #fffbeb;
+            --warning-border: #fcd34d;
             --success: #10b981;
-            --success-light: #d1fae5;
-            --info: #818cf8;
-            --info-light: #e0e7ff;
+            --success-light: #ecfdf5;
+            --danger: #ef4444;
+            --danger-light: #fef2f2;
+            --info: #3b82f6;
+            --info-light: #eff6ff;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.08), 0 8px 16px -8px rgba(0, 0, 0, 0.04);
+            --radius-sm: 10px;
+            --radius: 16px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
         body {
-            background: var(--bg);
+            background: linear-gradient(135deg, #e2e8f0 0%, #f0f4f8 40%, #e8ecf1 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 24px;
-            min-width: 1340px;
+            padding: 20px;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-width: 1280px;
         }
         .main-container {
-            width: 1300px;
+            width: 1260px;
             background: var(--surface);
-            border-radius: 28px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
-            padding: 28px 30px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            padding: 24px 28px 28px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+        header {
+            text-align: center;
             flex-shrink: 0;
         }
-        h1 {
-            text-align: center;
+        header h1 {
+            font-size: 28px;
+            font-weight: 800;
             color: var(--text);
-            font-size: 30px;
-            font-weight: 700;
-            flex-shrink: 0;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        .subtitle {
-            text-align: center;
+        header h1 .icon {
+            font-size: 34px;
+        }
+        header .subtitle {
             color: var(--text-secondary);
-            font-size: 15px;
-            flex-shrink: 0;
+            font-size: 14px;
+            margin-top: 4px;
+            font-weight: 500;
         }
         .workspace {
             display: flex;
-            gap: 24px;
+            gap: 22px;
             flex-wrap: nowrap;
             flex-shrink: 0;
-            align-items: flex-start;
+            align-items: stretch;
+            min-height: 620px;
         }
-        .system-panel {
-            width: 430px;
+        /* LEFT PANEL */
+        .left-panel {
+            width: 380px;
             flex-shrink: 0;
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 20px 22px;
-            border: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
-        .system-panel h3 {
+        .card {
+            background: var(--surface-alt);
+            border-radius: var(--radius-lg);
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .card h3 {
+            font-size: 16px;
+            font-weight: 700;
             color: var(--text);
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0;
-        }
-        #equationsInput {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .equation-row {
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
-            gap: 6px;
-            flex-wrap: nowrap;
-            background: white;
-            padding: 10px 10px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            height: 50px;
+            gap: 8px;
         }
-        .equation-row input {
-            width: 58px;
-            padding: 6px 2px;
-            border: 2px solid #cbd5e1;
+        .eq-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: nowrap;
+            background: #fff;
+            padding: 9px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            margin-bottom: 8px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        .eq-row:last-child {
+            margin-bottom: 0;
+        }
+        .eq-row:hover {
+            border-color: #c4b5fd;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.06);
+        }
+        .eq-row input {
+            width: 54px;
+            height: 34px;
+            padding: 4px 2px;
+            border: 2px solid #d1d5db;
             border-radius: 8px;
             text-align: center;
-            font-weight: 600;
-            font-size: 15px;
-            flex-shrink: 0;
-            height: 34px;
-            transition: 0.15s;
-        }
-        .equation-row input:focus {
-            border-color: var(--primary);
-            background: #eef2ff;
-            outline: none;
-        }
-        .equation-row .var {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 14px;
+            flex-shrink: 0;
+            transition: var(--transition);
+            background: #fafbfc;
+            color: var(--text);
+            font-family: inherit;
+        }
+        .eq-row input:focus {
+            border-color: var(--primary);
+            background: #fff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        .eq-row input.const-input {
+            border-color: var(--warning-border);
+            background: var(--warning-light);
+            font-weight: 800;
+        }
+        .eq-row input.const-input:focus {
+            border-color: var(--warning);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+        }
+        .eq-row .var-tag {
+            font-weight: 700;
+            font-size: 15px;
             color: var(--primary);
             flex-shrink: 0;
-            min-width: 14px;
+            min-width: 12px;
             text-align: center;
+            user-select: none;
         }
-        .equation-row .equals {
-            font-weight: 800;
-            font-size: 18px;
-            margin: 0 4px;
-            flex-shrink: 0;
-        }
-        .system-panel p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin: 0;
-            line-height: 1.4;
-        }
-        .matrix-panel {
-            flex: 1;
-            flex-shrink: 0;
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 20px 22px;
-            border: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-        .matrix-tabs {
-            display: flex;
-            gap: 8px;
-            flex-wrap: nowrap;
-        }
-        .matrix-tab {
-            padding: 8px 18px;
-            border-radius: 24px;
-            border: 2px solid var(--border);
-            background: white;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--text-secondary);
-            flex-shrink: 0;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            transition: 0.2s;
-        }
-        .matrix-tab.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        .matrix-interactive-area {
-            display: flex;
-            align-items: flex-start;
-            justify-content: flex-start;
-            gap: 30px;
-            flex-wrap: nowrap;
-            background: white;
-            border-radius: 16px;
-            padding: 18px 24px;
-            border: 1px solid var(--border);
-        }
-        .matrix-grid-container {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-        .bracket {
-            font-size: 50px;
-            font-weight: 300;
+        .eq-row .op {
             color: #94a3b8;
-            line-height: 1;
+            font-weight: 500;
             flex-shrink: 0;
+            user-select: none;
         }
-        .matrix-grid {
+        .eq-row .eq-sign {
+            font-weight: 800;
+            font-size: 17px;
+            margin: 0 3px;
+            flex-shrink: 0;
+            color: #64748b;
+            user-select: none;
+        }
+        /* Preset buttons */
+        .preset-grid {
             display: grid;
-            grid-template-columns: repeat(3, 68px);
-            grid-template-rows: repeat(3, 56px);
-            gap: 6px;
-            flex-shrink: 0;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
-        .matrix-cell {
-            background: white;
-            border: 2px solid #cbd5e1;
-            border-radius: 10px;
+        .preset-btn {
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            text-align: center;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .preset-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+        .preset-btn:active {
+            transform: scale(0.96);
+            transition: 0.08s;
+        }
+        .preset-btn.random-btn {
+            border-style: dashed;
+            border-color: #c4b5fd;
+            background: #fafafe;
+            color: #6d28d9;
+        }
+        .constant-bank {
+            display: flex;
+            gap: 10px;
+            flex-wrap: nowrap;
+        }
+        .constant-pill {
+            flex: 1;
+            height: 44px;
+            background: var(--warning-light);
+            border: 2px dashed var(--warning-border);
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 68px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: grab;
+            transition: var(--transition);
+            user-select: none;
+            color: #92400e;
+            position: relative;
+        }
+        .constant-pill:hover {
+            background: #fef9c3;
+            border-color: var(--warning);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.2);
+        }
+        .constant-pill:active {
+            cursor: grabbing;
+            opacity: 0.7;
+            transform: scale(0.94);
+        }
+        .constant-pill.dragging {
+            opacity: 0.4;
+            transform: scale(0.9);
+        }
+        .constant-pill .pill-label {
+            font-size: 10px;
+            position: absolute;
+            top: -8px;
+            background: #fff;
+            padding: 1px 8px;
+            border-radius: 10px;
+            color: #92400e;
+            font-weight: 600;
+            border: 1px solid var(--warning-border);
+            white-space: nowrap;
+        }
+        /* RIGHT PANEL */
+        .right-panel {
+            flex: 1;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .matrix-card {
+            background: var(--surface-alt);
+            border-radius: var(--radius-lg);
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+        }
+        .matrix-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: nowrap;
+        }
+        .matrix-tab {
+            padding: 9px 16px;
+            border-radius: 22px;
+            border: 2px solid var(--border);
+            background: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            transition: var(--transition);
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .matrix-tab:hover {
+            border-color: #b4b0f8;
+            color: var(--primary);
+            background: #fafafe;
+        }
+        .matrix-tab.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .matrix-tab.tab-dx,
+        .matrix-tab.tab-dy,
+        .matrix-tab.tab-dz {
+            position: relative;
+        }
+        .matrix-tab.tab-dx.active {
+            background: #ea580c;
+            border-color: #ea580c;
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+        }
+        .matrix-tab.tab-dy.active {
+            background: #0891b2;
+            border-color: #0891b2;
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
+        }
+        .matrix-tab.tab-dz.active {
+            background: #7c3aed;
+            border-color: #7c3aed;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        .matrix-visual-area {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: nowrap;
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+        .matrix-grid-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .bracket {
+            font-size: 48px;
+            font-weight: 200;
+            color: #b0b8c4;
+            line-height: 1;
+            flex-shrink: 0;
+            user-select: none;
+            transition: var(--transition);
+        }
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 72px);
+            grid-template-rows: repeat(3, 56px);
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .matrix-cell {
+            background: #fff;
+            border: 2px solid #d1d5db;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 72px;
             height: 56px;
             flex-shrink: 0;
-            transition: 0.2s;
+            transition: var(--transition);
+            position: relative;
+            cursor: default;
         }
-        .matrix-cell.const-highlight {
+        .matrix-cell.coeff-cell {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+        .matrix-cell.const-cell {
             background: var(--warning-light) !important;
-            border-color: var(--warning) !important;
+            border-color: var(--warning-border) !important;
+            border-style: solid !important;
+            animation: pulse-amber 2.5s ease-in-out infinite;
         }
-        .matrix-cell.coeff-highlight {
-            background: var(--info-light) !important;
-            border-color: var(--info) !important;
+        @keyframes pulse-amber {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+            }
         }
-        .matrix-cell.drop-allowed {
-            border-color: var(--success) !important;
-            background: var(--success-light) !important;
+        .matrix-cell.drop-hover {
+            border-color: #10b981 !important;
+            background: #d1fae5 !important;
+            box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.15) !important;
+            transform: scale(1.06);
+            z-index: 2;
+            animation: none !important;
+        }
+        .matrix-cell.drop-invalid {
+            border-color: #ef4444 !important;
+            background: #fef2f2 !important;
+            animation: shake 0.4s ease !important;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-4px);
+            }
+            50% {
+                transform: translateX(4px);
+            }
+            75% {
+                transform: translateX(-3px);
+            }
         }
         .matrix-cell input {
             width: 100%;
@@ -233,122 +445,250 @@
             border: none;
             text-align: center;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             background: transparent;
             outline: none;
-            border-radius: 10px;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            color: var(--text);
+            cursor: text;
+            transition: var(--transition);
         }
-        .constant-column {
+        .matrix-cell.const-cell input {
+            color: #92400e;
+            font-weight: 800;
+        }
+        .matrix-cell input:focus {
+            background: rgba(79, 70, 229, 0.04);
+            box-shadow: inset 0 0 0 2px var(--primary);
+        }
+        .constant-side {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             flex-shrink: 0;
         }
-        .constant-cell {
-            width: 68px;
+        .constant-side-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            color: #92400e;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+        .constant-side-cell {
+            width: 72px;
             height: 56px;
             background: var(--warning-light);
-            border: 2px dashed var(--warning);
-            border-radius: 10px;
+            border: 2px dashed var(--warning-border);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
+            font-weight: 800;
+            font-size: 15px;
             cursor: grab;
-            font-size: 16px;
             flex-shrink: 0;
-            transition: 0.15s;
+            transition: var(--transition);
+            color: #92400e;
+            user-select: none;
         }
-        .constant-cell:active {
+        .constant-side-cell:hover {
+            background: #fef9c3;
+            border-color: var(--warning);
+            transform: translateX(2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+        }
+        .constant-side-cell:active {
             cursor: grabbing;
             opacity: 0.6;
+            transform: scale(0.9);
         }
-        .matrix-panel p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin: 0;
-            line-height: 1.4;
-        }
-        .sarrus-container {
-            background: white;
-            border-radius: 16px;
+        .sarrus-card {
+            background: #fff;
+            border-radius: var(--radius);
             padding: 16px 20px;
             border: 1px solid var(--border);
-            font-size: 14px;
+            box-shadow: var(--shadow-sm);
+            font-size: 13px;
+            line-height: 1.7;
             color: var(--text-secondary);
-            line-height: 1.6;
+            max-height: 280px;
+            overflow-y: auto;
+            transition: var(--transition);
         }
-        .sarrus-highlight {
-            background: var(--warning-light);
-            padding: 2px 6px;
-            border-radius: 4px;
+        .sarrus-card h4 {
+            font-size: 15px;
             font-weight: 700;
-            display: inline-block;
             color: var(--text);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .result-box {
+        .sarrus-term {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: 700;
+            margin: 0 1px;
+            font-size: 12px;
+            letter-spacing: 0.2px;
+        }
+        .sarrus-term.pos {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .sarrus-term.neg {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .sarrus-highlight-num {
+            font-weight: 800;
+            font-size: 13px;
+            padding: 1px 5px;
+            border-radius: 3px;
+            display: inline-block;
+            margin: 0 1px;
+        }
+        .result-bar {
             padding: 16px 20px;
-            border-radius: 16px;
+            border-radius: var(--radius);
             text-align: center;
             font-weight: 800;
-            font-size: 18px;
-            min-height: 56px;
+            font-size: 17px;
+            transition: all 0.4s;
+            box-shadow: var(--shadow-sm);
+            min-height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.3s;
+            gap: 8px;
+            flex-wrap: wrap;
         }
-        button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 24px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-            flex-shrink: 0;
-            height: 38px;
-            transition: 0.2s;
+        .result-bar.solved {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #6ee7b7;
         }
-        button:hover {
-            background: var(--primary-hover);
+        .result-bar.no-solution {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #fca5a5;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.3px;
+        }
+        .badge.green {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .badge.red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .badge.blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .highlight-d {
+            color: var(--primary);
+            font-weight: 800;
+        }
+        .highlight-dx {
+            color: #ea580c;
+            font-weight: 800;
+        }
+        .highlight-dy {
+            color: #0891b2;
+            font-weight: 800;
+        }
+        .highlight-dz {
+            color: #7c3aed;
+            font-weight: 800;
+        }
+        .tooltip-hint {
+            font-size: 11px;
+            color: #94a3b8;
+            text-align: center;
+            font-style: italic;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
     <div class="main-container">
-        <h1>🧪 Lab Determinan SPLTV</h1>
-        <p class="subtitle">Edit langsung &middot; Seret konstanta &middot; Lihat Sarrus real‑time</p>
+        <header>
+            <h1><span class="icon">🧪</span>Lab Determinan SPLTV</h1>
+            <p class="subtitle">Eksplorasi Interaktif &middot; Aturan Cramer &middot; Sarrus Real‑Time &middot; Drag & Drop</p>
+        </header>
         <div class="workspace">
-            <div class="system-panel">
-                <h3>📝 Sistem Persamaan</h3>
-                <div id="equationsInput"></div>
-                <p>✏️ Ubah koefisien atau konstanta, matriks langsung berubah.</p>
-            </div>
-            <div class="matrix-panel">
-                <div class="matrix-tabs">
-                    <button class="matrix-tab active" data-tab="D">Matriks D</button>
-                    <button class="matrix-tab" data-tab="Dx">Matriks Dx</button>
-                    <button class="matrix-tab" data-tab="Dy">Matriks Dy</button>
-                    <button class="matrix-tab" data-tab="Dz">Matriks Dz</button>
+            <!-- LEFT PANEL -->
+            <div class="left-panel">
+                <div class="card" id="equationsCard">
+                    <h3>📝 Sistem Persamaan</h3>
+                    <div id="equationsContainer"></div>
                 </div>
-                <div class="matrix-interactive-area">
-                    <div class="matrix-grid-container">
-                        <span class="bracket">[</span>
-                        <div class="matrix-grid" id="matrixGrid"></div>
-                        <span class="bracket">]</span>
+                <div class="card">
+                    <h3>🎯 Bank Konstanta <span style="font-weight:400;font-size:11px;color:#94a3b8;">(seret ke matriks)</span></h3>
+                    <div class="constant-bank" id="constantBank"></div>
+                    <p class="tooltip-hint" style="margin-top:8px;">Seret konstanta ke sel <span class="badge" style="background:#fffbeb;color:#92400e;">kuning</span> pada Dx/Dy/Dz</p>
+                </div>
+                <div class="card">
+                    <h3>📋 Contoh Soal</h3>
+                    <div class="preset-grid" id="presetGrid">
+                        <button class="preset-btn" data-preset="standard">🔢 Solusi Bulat</button>
+                        <button class="preset-btn" data-preset="fraction">🔣 Solusi Pecahan</button>
+                        <button class="preset-btn" data-preset="singular">⚠️ Determinan Nol</button>
+                        <button class="preset-btn random-btn" data-preset="random">🎲 Acak Baru</button>
                     </div>
-                    <div class="constant-column" id="constantColumn"></div>
                 </div>
-                <p>💡 Seret konstanta (kuning) ke sel kuning pada matriks Dx / Dy / Dz.</p>
-                <div class="sarrus-container" id="sarrusDisplay"></div>
-                <div class="result-box" id="resultBox"></div>
+            </div>
+            <!-- RIGHT PANEL -->
+            <div class="right-panel">
+                <div class="matrix-card">
+                    <div class="matrix-tabs" id="matrixTabs">
+                        <button class="matrix-tab active" data-tab="D">📐 Matriks D</button>
+                        <button class="matrix-tab tab-dx" data-tab="Dx">🔄 Matriks Dx</button>
+                        <button class="matrix-tab tab-dy" data-tab="Dy">🔄 Matriks Dy</button>
+                        <button class="matrix-tab tab-dz" data-tab="Dz">🔄 Matriks Dz</button>
+                    </div>
+                    <div class="matrix-visual-area" id="matrixVisualArea">
+                        <div class="matrix-grid-wrapper">
+                            <span class="bracket">[</span>
+                            <div class="matrix-grid" id="matrixGrid"></div>
+                            <span class="bracket">]</span>
+                        </div>
+                        <div class="constant-side" id="constantSide">
+                            <span class="constant-side-label">Konstanta</span>
+                        </div>
+                    </div>
+                    <p class="tooltip-hint">💡 Klik sel untuk mengedit langsung &middot; Seret konstanta ke sel kuning saat mode Dx/Dy/Dz</p>
+                </div>
+                <div class="sarrus-card" id="sarrusDisplay"></div>
+                <div class="result-bar solved" id="resultBox"></div>
             </div>
         </div>
     </div>
     <script>
         (function() {
+            // ============ STATE ============
             let coefficients = [
                 [1, 1, 1],
                 [2, -1, 1],
@@ -356,52 +696,29 @@
             ];
             let constants = [6, 3, 3];
             let activeTab = 'D';
-            let draggedConstant = null;
+            let draggedConstantValue = null;
+            let draggedConstantIndex = null;
 
-            function renderEquationsInput() {
-                const container = document.getElementById('equationsInput');
-                container.innerHTML = '';
-                const vars = ['x', 'y', 'z'];
-                coefficients.forEach((row, i) => {
-                    const eqRow = document.createElement('div');
-                    eqRow.className = 'equation-row';
-                    row.forEach((coeff, j) => {
-                        const input = document.createElement('input');
-                        input.type = 'number';
-                        input.value = coeff;
-                        input.step = 'any';
-                        input.addEventListener('input', (e) => {
-                            coefficients[i][j] = parseFloat(e.target.value) || 0;
-                            refreshAll();
-                        });
-                        eqRow.appendChild(input);
-                        const varSpan = document.createElement('span');
-                        varSpan.className = 'var';
-                        varSpan.textContent = vars[j];
-                        eqRow.appendChild(varSpan);
-                        if (j < 2) {
-                            const plus = document.createElement('span');
-                            plus.textContent = '+';
-                            plus.style.margin = '0 2px';
-                            plus.style.color = '#64748b';
-                            eqRow.appendChild(plus);
-                        }
-                    });
-                    const eqSign = document.createElement('span');
-                    eqSign.className = 'equals';
-                    eqSign.textContent = '=';
-                    eqRow.appendChild(eqSign);
-                    const constInput = document.createElement('input');
-                    constInput.type = 'number';
-                    constInput.value = constants[i];
-                    constInput.step = 'any';
-                    constInput.addEventListener('input', (e) => {
-                        constants[i] = parseFloat(e.target.value) || 0;
-                        refreshAll();
-                    });
-                    eqRow.appendChild(constInput);
-                    container.appendChild(eqRow);
-                });
+            // ============ DOM REFS ============
+            const equationsContainer = document.getElementById('equationsContainer');
+            const constantBank = document.getElementById('constantBank');
+            const matrixGrid = document.getElementById('matrixGrid');
+            const constantSide = document.getElementById('constantSide');
+            const sarrusDisplay = document.getElementById('sarrusDisplay');
+            const resultBox = document.getElementById('resultBox');
+            const matrixTabs = document.getElementById('matrixTabs');
+            const presetGrid = document.getElementById('presetGrid');
+
+            // ============ CORE MATH ============
+            function det3x3(m) {
+                return (
+                    m[0][0] * m[1][1] * m[2][2] +
+                    m[0][1] * m[1][2] * m[2][0] +
+                    m[0][2] * m[1][0] * m[2][1] -
+                    m[0][2] * m[1][1] * m[2][0] -
+                    m[0][0] * m[1][2] * m[2][1] -
+                    m[0][1] * m[1][0] * m[2][2]
+                );
             }
 
             function getMatrixForTab(tab) {
@@ -421,156 +738,413 @@
                 return -1;
             }
 
+            function getTabColor(tab) {
+                if (tab === 'D') return 'var(--primary)';
+                if (tab === 'Dx') return '#ea580c';
+                if (tab === 'Dy') return '#0891b2';
+                if (tab === 'Dz') return '#7c3aed';
+                return 'var(--primary)';
+            }
+
+            // ============ RENDER: EQUATIONS ============
+            function renderEquations() {
+                equationsContainer.innerHTML = '';
+                const vars = ['x', 'y', 'z'];
+                coefficients.forEach((row, i) => {
+                    const eqRow = document.createElement('div');
+                    eqRow.className = 'eq-row';
+                    row.forEach((coeff, j) => {
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.value = coeff;
+                        input.step = 'any';
+                        input.title = `Koefisien ${vars[j]} persamaan ${i + 1}`;
+                        input.addEventListener('input', () => {
+                            coefficients[i][j] = parseFloat(input.value) || 0;
+                            refreshAll();
+                        });
+                        eqRow.appendChild(input);
+                        const varSpan = document.createElement('span');
+                        varSpan.className = 'var-tag';
+                        varSpan.textContent = vars[j];
+                        eqRow.appendChild(varSpan);
+                        if (j < 2) {
+                            const plus = document.createElement('span');
+                            plus.className = 'op';
+                            plus.textContent = '+';
+                            eqRow.appendChild(plus);
+                        }
+                    });
+                    const eqSign = document.createElement('span');
+                    eqSign.className = 'eq-sign';
+                    eqSign.textContent = '=';
+                    eqRow.appendChild(eqSign);
+                    const constInput = document.createElement('input');
+                    constInput.type = 'number';
+                    constInput.value = constants[i];
+                    constInput.step = 'any';
+                    constInput.className = 'const-input';
+                    constInput.title = `Konstanta persamaan ${i + 1}`;
+                    constInput.addEventListener('input', () => {
+                        constants[i] = parseFloat(constInput.value) || 0;
+                        refreshAll();
+                    });
+                    eqRow.appendChild(constInput);
+                    equationsContainer.appendChild(eqRow);
+                });
+            }
+
+            // ============ RENDER: CONSTANT BANK ============
+            function renderConstantBank() {
+                constantBank.innerHTML = '';
+                constants.forEach((val, i) => {
+                    const pill = document.createElement('div');
+                    pill.className = 'constant-pill';
+                    pill.innerHTML = `<span class="pill-label">k${i + 1}</span>${val}`;
+                    pill.draggable = true;
+                    pill.title = `Seret konstanta k${i + 1} ke sel kuning di matriks`;
+                    pill.addEventListener('dragstart', (e) => {
+                        draggedConstantValue = val;
+                        draggedConstantIndex = i;
+                        pill.classList.add('dragging');
+                        e.dataTransfer.effectAllowed = 'move';
+                        e.dataTransfer.setData('text/plain', JSON.stringify({ value: val, index: i }));
+                        setTimeout(() => pill.classList.add('dragging'), 0);
+                    });
+                    pill.addEventListener('dragend', () => {
+                        pill.classList.remove('dragging');
+                        draggedConstantValue = null;
+                        draggedConstantIndex = null;
+                        clearAllDropHovers();
+                    });
+                    constantBank.appendChild(pill);
+                });
+            }
+
+            // ============ RENDER: CONSTANT SIDE (in matrix area) ============
+            function renderConstantSide() {
+                constantSide.querySelectorAll('.constant-side-cell').forEach(el => el.remove());
+                constants.forEach((val, i) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'constant-side-cell';
+                    cell.textContent = val;
+                    cell.draggable = true;
+                    cell.title = `Seret k${i + 1}=${val} ke sel kuning`;
+                    cell.addEventListener('dragstart', (e) => {
+                        draggedConstantValue = val;
+                        draggedConstantIndex = i;
+                        cell.style.opacity = '0.5';
+                        e.dataTransfer.effectAllowed = 'move';
+                        e.dataTransfer.setData('text/plain', JSON.stringify({ value: val, index: i }));
+                    });
+                    cell.addEventListener('dragend', () => {
+                        cell.style.opacity = '1';
+                        draggedConstantValue = null;
+                        draggedConstantIndex = null;
+                        clearAllDropHovers();
+                    });
+                    constantSide.appendChild(cell);
+                });
+            }
+
+            function clearAllDropHovers() {
+                document.querySelectorAll('.matrix-cell.drop-hover, .matrix-cell.drop-invalid').forEach(cell => {
+                    cell.classList.remove('drop-hover', 'drop-invalid');
+                });
+            }
+
+            // ============ RENDER: MATRIX GRID ============
             function renderMatrix() {
-                const grid = document.getElementById('matrixGrid');
-                grid.innerHTML = '';
+                matrixGrid.innerHTML = '';
                 const matrix = getMatrixForTab(activeTab);
                 const highlightCol = getHighlightCol(activeTab);
                 for (let i = 0; i < 3; i++) {
                     for (let j = 0; j < 3; j++) {
                         const cell = document.createElement('div');
                         cell.className = 'matrix-cell';
-                        if (j === highlightCol) {
-                            cell.classList.add('const-highlight');
+                        const isConstCol = (j === highlightCol && activeTab !== 'D');
+                        if (isConstCol) {
+                            cell.classList.add('const-cell');
                         } else {
-                            cell.classList.add('coeff-highlight');
+                            cell.classList.add('coeff-cell');
                         }
+                        cell.dataset.row = i;
+                        cell.dataset.col = j;
+                        cell.title = isConstCol ?
+                            `Baris ${i+1}, Kolom ${j+1} (konstanta) – seret konstanta ke sini` :
+                            `Baris ${i+1}, Kolom ${j+1} (koefisien)`;
+                        // Drag over
                         cell.addEventListener('dragover', (e) => {
                             e.preventDefault();
-                            if (j === highlightCol && activeTab !== 'D') {
-                                cell.classList.add('drop-allowed');
+                            if (isConstCol && activeTab !== 'D') {
+                                cell.classList.add('drop-hover');
+                                cell.classList.remove('drop-invalid');
+                                e.dataTransfer.dropEffect = 'move';
+                            } else if (activeTab !== 'D') {
+                                cell.classList.add('drop-invalid');
+                                cell.classList.remove('drop-hover');
+                                e.dataTransfer.dropEffect = 'none';
                             }
                         });
                         cell.addEventListener('dragleave', () => {
-                            cell.classList.remove('drop-allowed');
+                            cell.classList.remove('drop-hover', 'drop-invalid');
                         });
                         cell.addEventListener('drop', (e) => {
                             e.preventDefault();
-                            cell.classList.remove('drop-allowed');
-                            if (draggedConstant !== null && j === highlightCol && activeTab !== 'D') {
-                                constants[i] = draggedConstant;
+                            cell.classList.remove('drop-hover', 'drop-invalid');
+                            if (draggedConstantValue !== null && isConstCol && activeTab !== 'D') {
+                                constants[i] = draggedConstantValue;
                                 refreshAll();
                             }
-                            draggedConstant = null;
+                            draggedConstantValue = null;
+                            draggedConstantIndex = null;
+                            clearAllDropHovers();
                         });
+                        // Input inside cell
                         const input = document.createElement('input');
                         input.type = 'number';
                         input.value = matrix[i][j];
                         input.step = 'any';
-                        input.addEventListener('input', (e) => {
-                            const newValue = parseFloat(e.target.value) || 0;
+                        input.title = isConstCol ? `Konstanta baris ${i+1}` : `Koefisien [${i+1}][${j+1}]`;
+                        input.addEventListener('input', () => {
+                            const newVal = parseFloat(input.value) || 0;
                             if (activeTab === 'D') {
-                                coefficients[i][j] = newValue;
+                                coefficients[i][j] = newVal;
                             } else if (activeTab === 'Dx' && j === 0) {
-                                constants[i] = newValue;
+                                constants[i] = newVal;
                             } else if (activeTab === 'Dy' && j === 1) {
-                                constants[i] = newValue;
+                                constants[i] = newVal;
                             } else if (activeTab === 'Dz' && j === 2) {
-                                constants[i] = newValue;
+                                constants[i] = newVal;
                             } else {
-                                coefficients[i][j] = newValue;
+                                coefficients[i][j] = newVal;
                             }
                             refreshAll();
                         });
                         cell.appendChild(input);
-                        grid.appendChild(cell);
+                        matrixGrid.appendChild(cell);
                     }
                 }
+                updateBracketColor();
             }
 
-            function renderConstantColumn() {
-                const col = document.getElementById('constantColumn');
-                col.innerHTML = '<strong style="display:block;text-align:center;font-size:13px;margin-bottom:6px;">Konstanta</strong>';
-                constants.forEach((val, i) => {
-                    const cell = document.createElement('div');
-                    cell.className = 'constant-cell';
-                    cell.textContent = val;
-                    cell.draggable = true;
-                    cell.addEventListener('dragstart', (e) => {
-                        draggedConstant = val;
-                        cell.style.opacity = '0.5';
-                    });
-                    cell.addEventListener('dragend', () => {
-                        cell.style.opacity = '1';
-                    });
-                    col.appendChild(cell);
+            function updateBracketColor() {
+                const brackets = document.querySelectorAll('.matrix-grid-wrapper .bracket');
+                const color = getTabColor(activeTab);
+                brackets.forEach(b => {
+                    b.style.color = color;
+                    b.style.fontWeight = '300';
                 });
             }
 
-            function det3x3(m) {
-                return m[0][0] * m[1][1] * m[2][2] +
-                    m[0][1] * m[1][2] * m[2][0] +
-                    m[0][2] * m[1][0] * m[2][1] -
-                    m[0][2] * m[1][1] * m[2][0] -
-                    m[0][0] * m[1][2] * m[2][1] -
-                    m[0][1] * m[1][0] * m[2][2];
-            }
-
-            function formatSarrus(m, name) {
+            // ============ RENDER: SARRUS DISPLAY ============
+            function formatSarrusDetail(m, name, tabColor) {
                 const [[a, b, c], [d, e, f], [g, h, i]] = m;
-                const pos = a * e * i + b * f * g + c * d * h;
-                const neg = c * e * g + a * f * h + b * d * i;
+                const p1 = a * e * i;
+                const p2 = b * f * g;
+                const p3 = c * d * h;
+                const n1 = c * e * g;
+                const n2 = a * f * h;
+                const n3 = b * d * i;
+                const posSum = p1 + p2 + p3;
+                const negSum = n1 + n2 + n3;
+                const det = posSum - negSum;
+
+                const formatNum = (n) => Number.isInteger(n) ? n : parseFloat(n.toFixed(4));
+
                 return `
-                    <div style="margin:6px 0;">
-                        <strong>${name}</strong> = 
-                        (<span class="sarrus-highlight">${a}·${e}·${i}</span> + 
-                         <span class="sarrus-highlight">${b}·${f}·${g}</span> + 
-                         <span class="sarrus-highlight">${c}·${d}·${h}</span>) − 
-                        (<span class="sarrus-highlight">${c}·${e}·${g}</span> + 
-                         <span class="sarrus-highlight">${a}·${f}·${h}</span> + 
-                         <span class="sarrus-highlight">${b}·${d}·${i}</span>)<br>
-                        = <strong>${pos}</strong> − <strong>${neg}</strong> = <span style="font-size:16px;font-weight:700;">${pos - neg}</span>
+                <div style="margin:6px 0;padding:10px 14px;background:#fafcfd;border-radius:10px;border-left:4px solid ${tabColor};">
+                    <strong style="color:${tabColor};font-size:14px;">📐 ${name}</strong>
+                    <div style="margin-top:6px;font-size:12px;line-height:1.8;">
+                        <span style="color:#64748b;">Rumus Sarrus:</span><br>
+                        <span style="font-weight:700;">= (</span>
+                        <span class="sarrus-term pos">${formatNum(a)}·${formatNum(e)}·${formatNum(i)}</span>
+                        <span style="font-weight:700;"> + </span>
+                        <span class="sarrus-term pos">${formatNum(b)}·${formatNum(f)}·${formatNum(g)}</span>
+                        <span style="font-weight:700;"> + </span>
+                        <span class="sarrus-term pos">${formatNum(c)}·${formatNum(d)}·${formatNum(h)}</span>
+                        <span style="font-weight:700;">)</span>
+                        <br>
+                        <span style="font-weight:700;">− (</span>
+                        <span class="sarrus-term neg">${formatNum(c)}·${formatNum(e)}·${formatNum(g)}</span>
+                        <span style="font-weight:700;"> + </span>
+                        <span class="sarrus-term neg">${formatNum(a)}·${formatNum(f)}·${formatNum(h)}</span>
+                        <span style="font-weight:700;"> + </span>
+                        <span class="sarrus-term neg">${formatNum(b)}·${formatNum(d)}·${formatNum(i)}</span>
+                        <span style="font-weight:700;">)</span>
+                        <br><br>
+                        <span style="color:#64748b;">Nilai suku:</span><br>
+                        <span class="badge green">+${formatNum(p1)}</span>
+                        <span class="badge green">+${formatNum(p2)}</span>
+                        <span class="badge green">+${formatNum(p3)}</span>
+                        <span class="badge red">−${formatNum(n1)}</span>
+                        <span class="badge red">−${formatNum(n2)}</span>
+                        <span class="badge red">−${formatNum(n3)}</span>
+                        <br><br>
+                        <span style="font-weight:700;">= ${formatNum(posSum)} − ${formatNum(negSum)}</span>
+                        <br>
+                        <span style="font-size:17px;font-weight:800;color:${tabColor};">= ${formatNum(det)}</span>
                     </div>
-                `;
+                </div>`;
             }
 
-            function calculateAll() {
+            function renderSarrusAndResult() {
                 const D = det3x3(coefficients);
                 const Dx = det3x3(getMatrixForTab('Dx'));
                 const Dy = det3x3(getMatrixForTab('Dy'));
                 const Dz = det3x3(getMatrixForTab('Dz'));
-                document.getElementById('sarrusDisplay').innerHTML = `
-                    <h4 style="margin-bottom:8px;font-size:15px;">📐 Aturan Sarrus (Real‑Time)</h4>
-                    ${formatSarrus(coefficients, 'D')}
-                    <hr style="margin:12px 0;border:0.5px solid #e2e8f0;">
-                    ${formatSarrus(getMatrixForTab('Dx'), 'Dx')}
-                    ${formatSarrus(getMatrixForTab('Dy'), 'Dy')}
-                    ${formatSarrus(getMatrixForTab('Dz'), 'Dz')}
-                `;
-                const resultDiv = document.getElementById('resultBox');
+
+                // Only show active tab's detailed Sarrus + summary of all
+                const activeMatrix = getMatrixForTab(activeTab);
+                const activeDet = det3x3(activeMatrix);
+                const tabColor = getTabColor(activeTab);
+
+                let sarrusHTML = `<h4>📐 Aturan Sarrus – <span style="color:${tabColor};">Matriks ${activeTab}</span></h4>`;
+                sarrusHTML += formatSarrusDetail(activeMatrix, activeTab, tabColor);
+                sarrusHTML += `
+                <details style="margin-top:10px;font-size:12px;cursor:pointer;">
+                    <summary style="font-weight:700;color:#64748b;">📋 Lihat semua determinan</summary>
+                    <div style="margin-top:8px;">
+                        ${formatSarrusDetail(coefficients, 'D', 'var(--primary)')}
+                        ${formatSarrusDetail(getMatrixForTab('Dx'), 'Dx', '#ea580c')}
+                        ${formatSarrusDetail(getMatrixForTab('Dy'), 'Dy', '#0891b2')}
+                        ${formatSarrusDetail(getMatrixForTab('Dz'), 'Dz', '#7c3aed')}
+                    </div>
+                </details>`;
+                sarrusDisplay.innerHTML = sarrusHTML;
+
+                // Result
+                const formatNum = (n) => Number.isInteger(n) ? n : parseFloat(n.toFixed(4));
                 if (Math.abs(D) < 1e-10) {
-                    resultDiv.innerHTML = '⚠️ Determinan D = 0, sistem tidak memiliki solusi tunggal.';
-                    resultDiv.style.background = '#fee2e2';
+                    resultBox.className = 'result-bar no-solution';
+                    resultBox.innerHTML =
+                        `⚠️ <strong>Determinan D = 0</strong> — Sistem <em>tidak memiliki solusi tunggal</em> (mungkin tidak konsisten atau memiliki tak hingga solusi).`;
                 } else {
                     const x = Dx / D;
                     const y = Dy / D;
                     const z = Dz / D;
-                    resultDiv.innerHTML = `✅ Solusi: <strong>x = ${x.toFixed(4)}</strong>, <strong>y = ${y.toFixed(4)}</strong>, <strong>z = ${z.toFixed(4)}</strong>`;
-                    resultDiv.style.background = '#d9f99d';
+                    resultBox.className = 'result-bar solved';
+                    resultBox.innerHTML = `
+                    ✅ <strong>Solusi (Cramer):</strong>
+                    <span style="color:#4f46e5;">x = <strong>${formatNum(x)}</strong></span>
+                    <span style="color:#ea580c;">y = <strong>${formatNum(y)}</strong></span>
+                    <span style="color:#7c3aed;">z = <strong>${formatNum(z)}</strong></span>
+                    <span style="font-size:12px;color:#64748b;">| D = ${formatNum(D)}</span>
+                  `;
                 }
             }
 
+            // ============ REFRESH ALL ============
             function refreshAll() {
-                renderEquationsInput();
+                renderEquations();
                 renderMatrix();
-                renderConstantColumn();
-                calculateAll();
+                renderConstantBank();
+                renderConstantSide();
+                renderSarrusAndResult();
             }
 
-            document.querySelectorAll('.matrix-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.matrix-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    activeTab = tab.dataset.tab;
-                    renderMatrix();
-                    calculateAll();
-                });
+            // ============ TAB HANDLING ============
+            matrixTabs.addEventListener('click', (e) => {
+                const tabBtn = e.target.closest('.matrix-tab');
+                if (!tabBtn) return;
+                document.querySelectorAll('.matrix-tab').forEach(t => t.classList.remove('active'));
+                tabBtn.classList.add('active');
+                activeTab = tabBtn.dataset.tab;
+                renderMatrix();
+                renderSarrusAndResult();
             });
 
-            renderEquationsInput();
+            // ============ PRESET HANDLING ============
+            const presets = {
+                standard: {
+                    coef: [
+                        [1, 1, 1],
+                        [2, -1, 1],
+                        [1, 2, -1]
+                    ],
+                    consts: [6, 3, 3]
+                },
+                fraction: {
+                    coef: [
+                        [2, 1, -1],
+                        [1, -2, 3],
+                        [3, -1, 2]
+                    ],
+                    consts: [8, 1, 9]
+                },
+                singular: {
+                    coef: [
+                        [1, 2, 3],
+                        [2, 4, 6],
+                        [1, 1, 1]
+                    ],
+                    consts: [6, 12, 3]
+                },
+            };
+
+            function generateRandom() {
+                const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+                const coef = [];
+                for (let i = 0; i < 3; i++) {
+                    coef.push([randInt(-5, 5), randInt(-5, 5), randInt(-5, 5)]);
+                }
+                // Ensure D is not zero (with some tolerance)
+                const d = det3x3(coef);
+                if (Math.abs(d) < 1) {
+                    coef[0][0] += randInt(1, 4) * (Math.random() > 0.5 ? 1 : -1);
+                }
+                const consts = [randInt(-10, 10), randInt(-10, 10), randInt(-10, 10)];
+                return { coef, consts };
+            }
+
+            presetGrid.addEventListener('click', (e) => {
+                const btn = e.target.closest('.preset-btn');
+                if (!btn) return;
+                const presetKey = btn.dataset.preset;
+                let data;
+                if (presetKey === 'random') {
+                    data = generateRandom();
+                } else {
+                    data = presets[presetKey];
+                }
+                if (data) {
+                    coefficients = data.coef.map(r => [...r]);
+                    constants = [...data.consts];
+                    refreshAll();
+                    // Flash effect
+                    resultBox.style.transform = 'scale(1.03)';
+                    setTimeout(() => resultBox.style.transform = 'scale(1)', 200);
+                }
+            });
+
+            // ============ GLOBAL DRAG-DROP CLEANUP ============
+            document.addEventListener('dragend', () => {
+                draggedConstantValue = null;
+                draggedConstantIndex = null;
+                clearAllDropHovers();
+            });
+            document.addEventListener('drop', (e) => {
+                // Prevent default on document to avoid browser opening dragged content
+                if (!e.target.closest('.matrix-cell')) {
+                    e.preventDefault();
+                }
+            });
+            document.addEventListener('dragover', (e) => {
+                if (!e.target.closest('.matrix-cell')) {
+                    e.preventDefault();
+                }
+            });
+
+            // ============ INIT ============
+            renderEquations();
             renderMatrix();
-            renderConstantColumn();
-            calculateAll();
+            renderConstantBank();
+            renderConstantSide();
+            renderSarrusAndResult();
+
+            console.log('🧪 Lab Determinan SPLTV siap!');
+            console.log('   Fitur: Edit langsung | Drag & Drop konstanta | Sarrus real-time | Cramer');
+            console.log('   Coba seret konstanta kuning ke sel kuning pada mode Dx/Dy/Dz 🎯');
         })();
     </script>
 </body>
